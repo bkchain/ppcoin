@@ -1042,6 +1042,13 @@ public:
         if (!fileout)
             return error("CBlock::WriteToDisk() : AppendBlockFile failed");
 
+        struct flock lock;
+        lock.l_type    = F_WRLCK;
+        lock.l_start   = 0;
+        lock.l_whence  = SEEK_CUR;
+        lock.l_len     = 0;
+        fcntl(fileno(fileout), F_SETLK, &lock);
+
         // Write index header
         unsigned char pchMessageStart[4];
         GetMessageStart(pchMessageStart, true);
@@ -1065,6 +1072,9 @@ public:
             fsync(fileno(fileout));
 #endif
         }
+
+        lock.l_type = F_UNLCK;
+        fcntl(fileno(fileout), F_SETLK, &lock);
 
         return true;
     }
