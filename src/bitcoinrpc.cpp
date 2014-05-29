@@ -49,6 +49,9 @@ static CCriticalSection cs_nWalletUnlockTime;
 
 extern Value dumpprivkey(const Array& params, bool fHelp);
 extern Value importprivkey(const Array& params, bool fHelp);
+extern Value sendrawtransaction(const Array& params, bool fHelp);
+extern Value getrawmempool(const Array& params, bool fHelp);
+extern Value getrawtransaction(const Array& params, bool fHelp);
 
 Object JSONRPCError(int code, const string& message)
 {
@@ -2495,6 +2498,9 @@ static const CRPCCommand vRPCCommands[] =
     { "repairwallet",           &repairwallet,           false},
     { "makekeypair",            &makekeypair,            false},
     { "sendalert",              &sendalert,              false},
+    { "sendrawtransaction",     &sendrawtransaction,     false },
+    { "getrawtransaction",      &getrawtransaction,      false },
+    { "getrawmempool",          &getrawmempool,          true },
 };
 
 CRPCTable::CRPCTable()

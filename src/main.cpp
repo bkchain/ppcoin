@@ -117,7 +117,7 @@ void static EraseFromWallets(uint256 hash)
 }
 
 // make sure all wallets know about the given transaction, in the given block
-void static SyncWithWallets(const CTransaction& tx, const CBlock* pblock = NULL, bool fUpdate = false, bool fConnect = true)
+void SyncWithWallets(const CTransaction& tx, const CBlock* pblock = NULL, bool fUpdate = false, bool fConnect = true)
 {
     if (!fConnect)
     {
@@ -660,6 +660,15 @@ bool CTxMemPool::addUnchecked(CTransaction &tx)
     return true;
 }
 
+void CTxMemPool::queryHashes(std::vector<uint256>& vtxid)
+{
+	vtxid.clear();
+
+	LOCK(cs);
+	vtxid.reserve(mapTx.size());
+	for (map<uint256, CTransaction>::iterator mi = mapTx.begin(); mi != mapTx.end(); ++mi)
+		vtxid.push_back((*mi).first);
+}
 
 bool CTxMemPool::remove(CTransaction &tx)
 {
